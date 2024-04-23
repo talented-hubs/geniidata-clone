@@ -6,17 +6,15 @@ interface ModalProps {
     open: boolean;
     closeModal: () => void;
     message: string;
-    sendBalance: (address: string, amount: number) => void;
 }
 
-const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, sendBalance }) => {
+const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal }) => {
     const [address, setAddress] = useState('');
     const [amount, setAmount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        sendBalance(address, amount);
     };
 
     const modalClose = () => {
@@ -107,7 +105,7 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, sendBalance }
                     <hr />
                     <div className='button-line'>
                         <span className='cancel-button' onClick={() => modalClose()}>Cancel</span>
-                        <span className='confirm-button' onClick={() => sendBalance(address, amount)}>Confirm</span>
+                        <span className='confirm-button' onClick={() => modalClose()}>Confirm</span>
                     </div>
                 </div>
             }

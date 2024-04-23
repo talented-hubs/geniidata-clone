@@ -4,7 +4,6 @@ import Navbar from "./components/navbar";
 import ConnectWallet, {
   ConnectedWalletParams,
 } from "./components/connect-dialog";
-import AssetsDialog from "./components/transaction-dialog/send-asset-dialog";
 import { useState } from "react";
 import { WalletID } from "./components/connect-dialog/connectWallets";
 import Alert, { AlertInfo } from "./components/alerts";
