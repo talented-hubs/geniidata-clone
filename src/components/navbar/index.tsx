@@ -306,18 +306,18 @@ function SideNav({ open }: SideNavProps) {
     >
       <div className="wrapper">
         <div className="menu-links">
-          <MenuItem text="Discover" />
-          <MenuItem text="Profile" />
-          <MenuItem text="Inscriptions" />
-          <MenuItem text="Index" />
-          <MenuItem text="Mint" />
-          <MenuItem text="Rewards" />
-          <MenuItem text="About" />
-          <MenuItem text="Documentation" />
+          <MenuItem text="Discover" to="" />
+          <MenuItem text="Profile" to="" />
+          <MenuItem text="Inscriptions" to="" />
+          <MenuItem text="Index" to="" />
+          <MenuItem text="Mint" to="" />
+          <MenuItem text="Rewards" to="" />
+          <MenuItem text="About" to="" />
+          <MenuItem text="Documentation" to="" />
         </div>
 
         <MenuControlToggle text="Dark Mode" />
-        <MenuItem text="Install Our App" />
+        <MenuItem text="Install Our App" to="" />
       </div>
     </aside>
   );
