@@ -9,23 +9,29 @@ interface ModalProps {
     address: string;
 }
 
+declare global {
+    interface Window {
+        unisat: any;
+    }
+}
+
 const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, address }) => {
     const [targetAddress, setTargetAddress] = useState('');
     const [amount, setAmount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [balance, setBalance] = useState({});
+    const [balance, setBalance] = useState({ total: 0, confirmed: 0, unconfirmed: 0 });
     const [fee, setFee] = useState('');
 
     useEffect(() => {
         window.unisat.getBalance('0x' + address)
-            .then((curBalance) => setBalance(curBalance));
+            .then((curBalance: any) => setBalance(curBalance));
     }, [open]);
 
     useEffect(() => {
-        if(currentPage == 2) {
+        if (currentPage == 2) {
             console.log(targetAddress, amount)
             window.unisat.sendBitcoin(targetAddress, amount)
-            .then(() => console.log('Transaction sent'))
+                .then(() => console.log('Transaction sent'))
         }
         modalClose()
     }, [currentPage])
@@ -72,7 +78,7 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, address }) =>
                     </div>
                     <form className='modal-body'>
                         <label>{fee}</label>
-                        <input type="text" value='Satoshi' onChange = {e => setFee(e.target.value)}/>
+                        <input type="text" value='Satoshi' onChange={e => setFee(e.target.value)} />
                     </form>
                     <div>
                         <div className='send-button' onClick={() => setCurrentPage(2)}>Send Asset</div>
