@@ -20,7 +20,7 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, address }) =>
     const [amount, setAmount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [balance, setBalance] = useState({ total: 0, confirmed: 0, unconfirmed: 0 });
-    const [fee, setFee] = useState('');
+    const [fee, setFee] = useState('Satoshi');
 
     useEffect(() => {
         window.unisat.getBalance('0x' + address)
@@ -45,6 +45,11 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, address }) =>
         closeModal()
     }
 
+    const setMaxAmount = (event: React.FormEvent) => {
+        event.preventDefault();
+        setAmount(balance.confirmed)
+    }
+
     if (!open) {
         return null;
     }
@@ -60,7 +65,10 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, address }) =>
                     <form onSubmit={handleSubmit} className="modal-body">
                         <input type="text" value={targetAddress} onChange={e => setTargetAddress(e.target.value)} placeholder='Address or name' required />
                         <label>Transfer Amount</label>
-                        <input type="text" value={amount} onChange={e => setAmount(Number(e.target.value))} placeholder='Amount' required />
+                        <div className="input-container">
+                            <input type="text" value={amount} onChange={e => setAmount(Number(e.target.value))} placeholder='Amount' required />
+                            <button className='input-button' onClick={setMaxAmount}>MAX</button>
+                        </div>
                     </form>
                     <div>
                         <div className='category'>
@@ -77,8 +85,7 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, address }) =>
                         </div>
                     </div>
                     <form className='modal-body'>
-                        <label>{fee}</label>
-                        <input type="text" value='Satoshi' onChange={e => setFee(e.target.value)} />
+                        <input type="text" value={fee} onChange={e => setFee(e.target.value)} />
                     </form>
                     <div>
                         <div className='send-button' onClick={() => setCurrentPage(2)}>Send Asset</div>

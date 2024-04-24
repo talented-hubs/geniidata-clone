@@ -134,3 +134,15 @@
 button {
     color: white;
 }
+
+.input-container {
+    position: relative;
+}
+
+.input-button {
+    position: absolute;
+    top: 20%;
+    right: 0;
+    color: #c49031;
+    cursor: pointer;
+}
