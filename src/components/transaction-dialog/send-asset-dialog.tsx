@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './send-assets-dialog.css';
 import Avatar from '../../assets/images/avatar.png'
 
@@ -6,12 +6,29 @@ interface ModalProps {
     open: boolean;
     closeModal: () => void;
     message: string;
+    address: string;
 }
 
-const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal }) => {
-    const [address, setAddress] = useState('');
+const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal, address }) => {
+    const [targetAddress, setTargetAddress] = useState('');
     const [amount, setAmount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [balance, setBalance] = useState({});
+    const [fee, setFee] = useState('');
+
+    useEffect(() => {
+        window.unisat.getBalance('0x' + address)
+            .then((curBalance) => setBalance(curBalance));
+    }, [open]);
+
+    useEffect(() => {
+        if(currentPage == 2) {
+            console.log(targetAddress, amount)
+            window.unisat.sendBitcoin(targetAddress, amount)
+            .then(() => console.log('Transaction sent'))
+        }
+        modalClose()
+    }, [currentPage])
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -35,27 +52,27 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal }) => {
                         <button onClick={modalClose}>X</button>
                     </div>
                     <form onSubmit={handleSubmit} className="modal-body">
-                        <input type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder='Address or name' required />
+                        <input type="text" value={targetAddress} onChange={e => setTargetAddress(e.target.value)} placeholder='Address or name' required />
                         <label>Transfer Amount</label>
                         <input type="text" value={amount} onChange={e => setAmount(Number(e.target.value))} placeholder='Amount' required />
                     </form>
                     <div>
                         <div className='category'>
                             <span className='status available'>Available</span>
-                            <span className='balance available'>0 BTC</span>
+                            <span className='balance available'>{balance.confirmed / 100000000} BTC</span>
                         </div>
                         <div className='category'>
                             <span className='status'>Unavailable</span>
-                            <span className='balance'>0.00000000 BTC</span>
+                            <span className='balance'>{balance.unconfirmed / 100000000} BTC</span>
                         </div>
                         <div className='category'>
                             <span className='status'>Total</span>
-                            <span className='balance'>0.00000000 BTC</span>
+                            <span className='balance'>{balance.total / 100000000} BTC</span>
                         </div>
                     </div>
                     <form className='modal-body'>
-                        <label>Fee</label>
-                        <input type="text" value='Satoshi' />
+                        <label>{fee}</label>
+                        <input type="text" value='Satoshi' onChange = {e => setFee(e.target.value)}/>
                     </form>
                     <div>
                         <div className='send-button' onClick={() => setCurrentPage(2)}>Send Asset</div>
@@ -63,10 +80,6 @@ const SendAssetDialog: React.FC<ModalProps> = ({ open, closeModal }) => {
                 </div>
                 :
                 <div className='modal-content second'>
-                    <div className="modal-header">
-                        <h2>Send BTC</h2>
-                        <button onClick={modalClose}>X</button>
-                    </div>
                     <div className='title'>Please confirm the transaction below:</div>
                     <div className='line'>
                         <img src={Avatar} alt='avatar' />

@@ -37,7 +37,7 @@ function App() {
     id,
     address,
     publicKey,
-    signature
+    signature,
   ) => {
     setOpenWallet(false);
     setConnectedWallet({
@@ -87,6 +87,7 @@ function App() {
         open={openAsset}
         closeModal={() => setOpenAsset(false)}
         message="Send Asset Dialog"
+        address={connectedWallet.address.toString()}
       />
       <div className="page-alerts">
         {alerts.map((alert) => (
